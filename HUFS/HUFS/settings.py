@@ -119,3 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_URL = '/accounts/login/' # 기본값
+LOGOUT_URL = '/accounts/logout/' # 기본값
+LOGIN_REDIRECT_URL = '/project/' # 반드시 정의할 것!
