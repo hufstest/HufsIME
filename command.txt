@@ -18,3 +18,5 @@ python manage.py createsuperuser
 
 Static 파일 collecting 하기
 python manage.py collectstatic
+
+branch 실험
