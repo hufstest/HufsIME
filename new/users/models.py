@@ -1,7 +1,42 @@
 from django.db import models
-
+from taggit.managers import TaggableManager
+from taggit.models import TagBase, TaggedItemBase
+from django.template.defaultfilters import slugify as default_slugify
 # Create your models here.
 from django.contrib.auth.models import AbstractUser, UserManager
+
+class PostTag(TagBase):
+    # NOTE: django-taggit does not allow unicode by default.
+    slug = models.SlugField(
+        verbose_name= 'slug',
+        unique=True,
+        max_length=100,
+        allow_unicode=True,
+    )
+
+    class Meta:
+        verbose_name = "tag"
+        verbose_name_plural = "tags"
+
+    def slugify(self, tag, i=None):
+        return default_slugify(tag)
+
+
+class TaggedPost(TaggedItemBase):
+    content_object = models.ForeignKey(
+        'Article',
+        on_delete=models.CASCADE,
+    )
+
+    tag = models.ForeignKey(
+        'PostTag',
+        related_name="%(app_label)s_%(class)s_items",
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        verbose_name = "tagged post"
+        verbose_name_plural = "tagged posts"
 
 class CustomUserManager(UserManager):
     pass
@@ -22,6 +57,12 @@ class Article(models.Model):
         blank=True,
         related_name='like_user_set',
         through='Like',
+    )
+    tags = TaggableManager(
+        verbose_name= 'tags',
+        help_text= 'A comma-separated list of tags.',
+        blank=True,
+        through=TaggedPost,
     )
 
     # comment_user_set = models.ManyToManyField(

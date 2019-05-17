@@ -17,7 +17,8 @@ class CustomUserChangeForm(UserChangeForm):
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['title', 'content', 'user', 'tags',]
 
 class CommentForm(forms.ModelForm):
     class Meta:
