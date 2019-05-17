@@ -1,8 +1,9 @@
 from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render, redirect
+from django.db.models import Count
 
-from users.models import Article, Comment, Answer, Like
+from users.models import Article, Comment, Answer, Like, TaggedPost
 from .forms import CustomUserCreationForm, ArticleForm, CommentForm, AnswerForm
 from django.views.generic import TemplateView
 
@@ -81,3 +82,11 @@ def delete_answer(request, id):
     
     return render(request, 'delete_confirm.html', {'answer' : the_answer})
 
+def recommend(request, id):
+    ordered = Article.objects.filter(user_id = id).values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')
+    prefer_tag_id = [ordered[0][0],ordered[1][0],ordered[2][0]]
+    prefer_article_id = TaggedPost.objects.filter(tag_id__in = prefer_tag_id).values('content_object_id').distinct()
+    articles = Article.objects.filter(id__in = prefer_article_id)
+    return render(request, 'home.html', {'articles' : articles})
+# from django.db.models import Count
+# Article.objects.filter(user_id = '3').values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')

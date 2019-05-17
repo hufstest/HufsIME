@@ -11,8 +11,8 @@
 <p>Hi {{ user.username }}
 <p><a href="{% url 'logout' %}">Log out</a></p>
 <h1><center>Member List</center></h1>
+<a href = "{% url 'recommend' user.id %}">추천게시글</a>
 <div class="container">
-
 <table class="table table-striped">
   <tr>
      <th>ID</th>
