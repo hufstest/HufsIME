@@ -84,9 +84,15 @@ def delete_answer(request, id):
 
 def recommend(request, id):
     ordered = Article.objects.filter(user_id = id).values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')
-    prefer_tag_id = [ordered[0][0],ordered[1][0],ordered[2][0]]
+    num = min(3,ordered.count())
+    prefer_tag_id = []
+    for i in range(num) :
+        prefer_tag_id.append(ordered[i][0])
     prefer_article_id = TaggedPost.objects.filter(tag_id__in = prefer_tag_id).values('content_object_id').distinct()
     articles = Article.objects.filter(id__in = prefer_article_id)
     return render(request, 'home.html', {'articles' : articles})
-# from django.db.models import Count
-# Article.objects.filter(user_id = '3').values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')
+
+def taggedview(request, id):
+    tagged_articles_id = TaggedPost.objects.filter(tag_id = id).values('content_object_id')
+    articles = Article.objects.filter(id__in = tagged_articles_id)
+    return render(request, 'home.html', {'articles' : articles})

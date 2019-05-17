@@ -5,7 +5,7 @@
 <p>{{article.content}}</p>
 <hr>
 {% for tag in article.tags.all %}
-    #{{tag}}
+    <a href = "{% url 'tagged' tag.id %}">#{{tag}}</a>
 {% endfor%}<br>
 {% if article.user.id == user.id %}
     <a class="btn btn-info" href ="{%url 'update_article' article.id %}" >Update  </a>

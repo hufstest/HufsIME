@@ -5,6 +5,7 @@ urlpatterns = [
     # path('', views.HomePageView.as_view(), name='home'),
     path('', views.home, name='home'),
     path('recommend/<int:id>/', views.recommend, name='recommend'),
+    path('tagged/<int:id>/', views.taggedview, name='tagged'),
     path('signup/', views.SignUp.as_view(), name='signup'),
     path('new/', views.create_article, name = 'add_article'),
     path('show/<int:id>/', views.show, name = 'show_article'),
