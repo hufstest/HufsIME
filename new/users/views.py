@@ -1,9 +1,18 @@
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from datetime import timezone, datetime
-from users.models import Article, Comment, Answer, Like, TaggedPost, Hit
+
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+try:
+    from django.utils import simplejson as json
+except ImportError:
+    import json
+from .models import Article, Comment, Answer, Like, TaggedPost, Hit
 from .forms import CustomUserCreationForm, ArticleForm, CommentForm, AnswerForm
 from django.views.generic import TemplateView
 
@@ -122,3 +131,23 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+@login_required
+@require_POST
+@csrf_exempt
+def like(request,id):
+    if request.method == 'POST':
+        user = request.user  # 로그인한 유저를 가져온다.
+        article_id = request.POST.get('pk', None)
+        article = Article.objects.get(pk=article_id)  # 해당 메모 오브젝트를 가져온다.
+
+        if article.like_user_set.filter(id=user.id).exists():  # 이미 해당 유저가 likes컬럼에 존재하면
+            user.like_set.filter(article_id=article.id).delete()  # likes 컬럼에서 해당 유저를 지운다.
+            message = 'You disliked this'
+        else:
+            user.like_set.create(article_id=article_id)
+            message = 'You liked this'
+
+    context = {'likes_count': article.like_count, 'message': message}
+    return HttpResponse(json.dumps(context), content_type='application/json')
+    # dic 형식을 json 형식으로 바꾸어 전달한다.
