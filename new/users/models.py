@@ -12,16 +12,17 @@ class CustomUser(AbstractUser):
 class Article(models.Model):
     title = models.CharField(max_length = 100)
     content = models.TextField()
-
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,)
-
-    # like_user_set = models.ManyToManyField(
-    #     CustomUser,
-    #     null=True,
-    #     blank=True,
-    #     related_name='like_user_set',
-    #     through='Like',
-    # )
+    @property
+    def like_count(self):
+      return self.like_user_set.count()
+    like_user_set = models.ManyToManyField(
+        CustomUser,
+        null=True,
+        blank=True,
+        related_name='like_user_set',
+        through='Like',
+    )
 
     # comment_user_set = models.ManyToManyField(
     #     CustomUser,
@@ -56,6 +57,11 @@ class Like(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,
     )
+
+    class Meta:
+      unique_together = (
+          ('user', 'article')
+      )
 class Comment(models.Model):
     article = models.ForeignKey(
         Article, on_delete=models.CASCADE
@@ -73,6 +79,12 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,
     )
+
+    class Meta:
+        ordering = ['-id']
+    
+    def __str__(self):
+        return self.comment_text
 class Answer(models.Model):
     article = models.ForeignKey(
         Article, on_delete=models.CASCADE,

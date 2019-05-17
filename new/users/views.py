@@ -21,11 +21,18 @@ def home(request):
 def show(request, id):
     the_article = Article.objects.get(id = id)
     comments = Comment.objects.filter(article__id = id)
-    form = CommentForm(request.POST or None)
-    if form.is_valid():
-        form.save()
+    answers = Answer.objects.filter(article__id = id)
+    commentform = CommentForm(request.POST or None)
+    answerform = AnswerForm(request.POST or None)
+    if commentform.is_valid():
+        commentform.save()
         return redirect('/users/show/%d'%(id))
-    return render(request, 'single_article.html', {'article' : the_article, 'comments' : comments, 'form' : form})
+    if answerform.is_valid():
+        answerform.save()
+        return redirect('/users/show/%d'%(id))
+    return render(request, 'single_article.html', {'article' : the_article, 'comments' : comments,
+                                                     'commentform' : commentform, 'answers' : answers,
+                                                     'answerform' : answerform,})
 
 def create_article(request):
     form = ArticleForm(request.POST or None)
@@ -64,3 +71,13 @@ def delete_comment(request, id):
         return redirect('/users/show/%d'%(article_id))
     
     return render(request, 'delete_confirm.html', {'comment' : the_comment})
+
+def delete_answer(request, id):
+    the_answer = Answer.objects.get(id = id)
+    article_id = the_answer.article.id
+    if request.method == 'POST':
+        the_answer.delete()
+        return redirect('/users/show/%d'%(article_id))
+    
+    return render(request, 'delete_confirm.html', {'answer' : the_answer})
+

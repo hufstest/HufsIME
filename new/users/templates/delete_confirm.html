@@ -4,8 +4,10 @@
   {% csrf_token %}
   {% if article %}
   <h2> Are you sure to remove {{ article.title }}</h2>
-  {% else %}
+  {% elif comment %}
   <h2> Are you sure to remove {{ comment.comment_text }}</h2>
+  {% else %}
+  <h2> Are you sure to remove {{ answer.answer_text }}</h2>
   {% endif %}
   <button class="btn btn-danger" type="submit">Delete</button>
   <button onclick="window.history.back();" class="btn btn-default" type="button">Cancel</button>

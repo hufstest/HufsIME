@@ -12,7 +12,7 @@
 <hr/>
 <form method="POST"> 
     {% csrf_token %}
-        <label>comment</label>  {{ form.comment_text}} 
+        <label>comment</label>  {{ commentform.comment_text}} 
         <input type="hidden" id="user" name="user" value="{{user.id}}">
         <input type="hidden" id="article" name="article" value="{{article.id}}">
     <button class="btn btn-default" type="submit">Save</button>
@@ -26,4 +26,16 @@
     <br/>
     <hr/>
 {% endfor %}
+<h3>Answer</h3><hr>
+{% for answer in answers %}
+    {{answer.answer_text}}
+    <a class="btn btn-danger" href="{%url 'delete_answer' answer.id %}">delete</a><br/>
+{% endfor %}
+<form method="POST"> 
+    {% csrf_token %}
+        <label>Answer</label>  {{ answerform.answer_text}} 
+        <input type="hidden" id="user" name="user" value="{{user.id}}">
+        <input type="hidden" id="article" name="article" value="{{article.id}}">
+    <button class="btn btn-default" type="submit">Save</button>
+</form>
 

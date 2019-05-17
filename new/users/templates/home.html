@@ -19,6 +19,7 @@
      <th>Title </th>
      <th>Content</th>
      <th>writer</th>
+     <th>liked</th>
   </tr>
   <tr>
   {% for article in articles%}
@@ -26,6 +27,7 @@
     <td> <a href ="{%url 'show_article' article.id %}" >{{ article.title }}</a></td>
     <td> {{ article.content }}</td>
     <td> {{ article.user }}</td>
+    <td> {{ article.like_count }}</td>
   </tr>
   {%endfor%}  
 </table>
