@@ -1,0 +1,15 @@
+<html>
+<body>
+<form method="post">
+  {% csrf_token %}
+  {% if article %}
+  <h2> Are you sure to remove {{ article.title }}</h2>
+  {% else %}
+  <h2> Are you sure to remove {{ comment.comment_text }}</h2>
+  {% endif %}
+  <button class="btn btn-danger" type="submit">Delete</button>
+  <button onclick="window.history.back();" class="btn btn-default" type="button">Cancel</button>
+</form>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</body>
+</html>

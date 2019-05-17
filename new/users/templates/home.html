@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% load socialaccount %}
+<h1>Django 로그인 test</h1>
+{% if user.is_authenticated %}
+<p>Hi {{ user.username }}
+<p><a href="{% url 'logout' %}">Log out</a></p>
+<h1><center>Member List</center></h1>
+<div class="container">
+
+<table class="table table-striped">
+  <tr>
+     <th>ID</th>
+     <th>Title </th>
+     <th>Content</th>
+     <th>writer</th>
+  </tr>
+  <tr>
+  {% for article in articles%}
+    <td> {{ article.id }} </td>
+    <td> <a href ="{%url 'show_article' article.id %}" >{{ article.title }}</a></td>
+    <td> {{ article.content }}</td>
+    <td> {{ article.user }}</td>
+  </tr>
+  {%endfor%}  
+</table>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   
+</div>
+
+<a class="btn btn-info pull-right" href = "{%url 'add_article' %}"> New Question </a>
+
+{% else %}
+<p><a href="{% url 'signup' %}">Sign Up</a></p>
+<p><a href="{% url 'login' %}">Log In </a></p>
+<p><a href="{% provider_login_url 'google' %}">Log In with Gmail</a></p>
+{% endif %}
+
+</body>
+</html>

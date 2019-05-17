@@ -9,39 +9,40 @@ class CustomUserManager(UserManager):
 class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
-class article(models.Model):
+class Article(models.Model):
+    title = models.CharField(max_length = 100)
     content = models.TextField()
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,)
 
-    like_user_set = models.ManyToManyField(
-        CustomUser,
-        null=True,
-        blank=True,
-        related_name='like_user_set',
-        through='Like',
-    )
+    # like_user_set = models.ManyToManyField(
+    #     CustomUser,
+    #     null=True,
+    #     blank=True,
+    #     related_name='like_user_set',
+    #     through='Like',
+    # )
 
-    comment_user_set = models.ManyToManyField(
-        CustomUser,
-        null=True,
-        blank=True,
-        related_name='comment_user_set',
-        through= "comment"
-    )
+    # comment_user_set = models.ManyToManyField(
+    #     CustomUser,
+    #     null=True,
+    #     blank=True,
+    #     related_name='comment_user_set',
+    #     through= "comment"
+    # )
 
-    answer_user_set = models.ManyToManyField(
-        CustomUser,
-        null=True,
-        blank=True,
-        related_name='answer_user_set',
-        through='answer',
-    )
+    # answer_user_set = models.ManyToManyField(
+    #     CustomUser,
+    #     null=True,
+    #     blank=True,
+    #     related_name='answer_user_set',
+    #     through='answer',
+    # )
 
 class Like(models.Model):
 
     article = models.ForeignKey(
-        article, on_delete=models.CASCADE,
+        Article, on_delete=models.CASCADE,
     )
 
     user = models.ForeignKey(
@@ -55,15 +56,15 @@ class Like(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,
     )
-class comment(models.Model):
+class Comment(models.Model):
     article = models.ForeignKey(
-        article, on_delete=models.CASCADE
+        Article, on_delete=models.CASCADE
     )
 
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE,
     )
-    comment_text=models.TextField()
+    comment_text=models.CharField(max_length = 300)
 
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -72,9 +73,9 @@ class comment(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,
     )
-class answer(models.Model):
+class Answer(models.Model):
     article = models.ForeignKey(
-        article, on_delete=models.CASCADE,
+        Article, on_delete=models.CASCADE,
     )
 
     user = models.ForeignKey(
