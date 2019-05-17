@@ -5,13 +5,13 @@
 <p>{{article.content}}</p>
 <hr>
 {% for tag in article.tags.all %}
-    <a href = "{% url 'tagged' tag.id %}">#{{tag}}</a>
+    <a href = "{% url 'tagged' tag.id %}">#{{tag.slug}}</a>
 {% endfor%}<br>
 {% if article.user.id == user.id %}
     <a class="btn btn-info" href ="{%url 'update_article' article.id %}" >Update  </a>
     <a class="btn btn-danger" href="{%url 'delete_article' article.id %}">Delete</a>
 {% endif %}
-<a class="btn btn-warning" href = {% url 'home' %}>go back</a> <br/> 
+<a class="btn btn-warning pull-right" href = {% url 'home' %}>Home</a> <br/> 
 <hr/>
 <form method="POST"> 
     {% csrf_token %}

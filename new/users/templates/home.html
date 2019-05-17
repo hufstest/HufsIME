@@ -11,6 +11,7 @@
 <p>User : {{ user.username }} <a href="{% url 'logout' %}">Log out</a></p>
 <h1><center>Member List</center></h1>
 <a class="btn btn-info pull-right" href = "{% url 'recommend' user.id %}">추천게시글</a>
+<a class="btn btn-default pull-right" href = "{% url 'home' %}">전체게시글</a>
   {% if not articles %}
     <br><h2 style="text-align : center">더 많은 질문을 입력할수록 추천 정확도가 높아집니다.</h2>
   {% else %}
@@ -22,6 +23,7 @@
         <th>Content</th>
         <th>writer</th>
         <th>liked</th>
+        <th>viewed</th>
       </tr>
       <tr>
       {% for article in articles%}
@@ -30,6 +32,7 @@
         <td> {{ article.content }}</td>
         <td> {{ article.user }}</td>
         <td> {{ article.like_count }}</td>
+        <td> {{ article.hits }}</td>
       </tr>
       {% endfor %}  
     </table>

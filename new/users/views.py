@@ -2,8 +2,8 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render, redirect
 from django.db.models import Count
-
-from users.models import Article, Comment, Answer, Like, TaggedPost
+from datetime import timezone, datetime
+from users.models import Article, Comment, Answer, Like, TaggedPost, Hit
 from .forms import CustomUserCreationForm, ArticleForm, CommentForm, AnswerForm
 from django.views.generic import TemplateView
 
@@ -25,6 +25,24 @@ def show(request, id):
     answers = Answer.objects.filter(article__id = id)
     commentform = CommentForm(request.POST or None)
     answerform = AnswerForm(request.POST or None)
+    try:
+        # ip주소와 게시글 번호로 기록을 조회함
+        hits = Hit.objects.get(ip=get_client_ip(request), article=the_article)
+    except Exception as e:
+        # 처음 게시글을 조회한 경우엔 조회 기록이 없음
+        print(e)
+        hits = Hit(ip=get_client_ip(request), article=the_article, date=str(datetime.now().date()))
+        Article.objects.filter(id=id).update(hits=the_article.hits + 1)
+        hits.save()
+    else:
+        # 조회 기록은 있으나, 날짜가 다른 경우
+        if not hits.date == str(datetime.now().date()):
+            Article.objects.filter(id=id).update(hits=the_article.hits + 1)
+            hits.date = str(datetime.now().date())
+            hits.save()
+        # 날짜가 같은 경우
+        else:
+            print(str(get_client_ip(request)) + ' has already hit this post.\n\n')
     if commentform.is_valid():
         commentform.save()
         return redirect('/users/show/%d'%(id))
@@ -96,3 +114,11 @@ def taggedview(request, id):
     tagged_articles_id = TaggedPost.objects.filter(tag_id = id).values('content_object_id')
     articles = Article.objects.filter(id__in = tagged_articles_id)
     return render(request, 'home.html', {'articles' : articles})
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
