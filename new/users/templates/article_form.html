@@ -8,6 +8,7 @@
       <label>Title</label> {{ form.title}} </br>
       <label>Content</label>  {{ form.content}} </br>
       <label>Tags</label> {{form.tags}} 쉼표로 구분해서 태그를 달아주세요.</br>
+      <label>Anonymity</label>  {{ form.anonymity}} </br>
       <input type="hidden" id="user" name="user" value="{{user.id}}">
   <button class="btn btn-default" type="submit">Save</button>
   <button onclick="window.history.back();" class="btn btn-default" type="button">Cancel</button>

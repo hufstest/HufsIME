@@ -12,7 +12,7 @@ try:
     from django.utils import simplejson as json
 except ImportError:
     import json
-from .models import Article, Comment, Answer, Like, TaggedPost, Hit
+from .models import Article, Comment, Answer, Like, TaggedPost, Hit, PostTag
 from .forms import CustomUserCreationForm, ArticleForm, CommentForm, AnswerForm
 from django.views.generic import TemplateView
 
@@ -117,12 +117,14 @@ def recommend(request, id):
         prefer_tag_id.append(ordered[i][0])
     prefer_article_id = TaggedPost.objects.filter(tag_id__in = prefer_tag_id).values('content_object_id').distinct()
     articles = Article.objects.filter(id__in = prefer_article_id)
-    return render(request, 'home.html', {'articles' : articles})
+    recommend = True
+    return render(request, 'home.html', {'articles' : articles, 'recommend' : recommend})
 
 def taggedview(request, id):
     tagged_articles_id = TaggedPost.objects.filter(tag_id = id).values('content_object_id')
     articles = Article.objects.filter(id__in = tagged_articles_id)
-    return render(request, 'home.html', {'articles' : articles})
+    tag_name = PostTag.objects.get(id = id).name
+    return render(request, 'home.html', {'articles' : articles, 'tag_name' : tag_name})
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

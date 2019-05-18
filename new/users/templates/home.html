@@ -9,7 +9,13 @@
 {% load socialaccount %}
 {% if user.is_authenticated %}
 <p>User : {{ user.username }} <a href="{% url 'logout' %}">Log out</a></p>
-<h1><center>Member List</center></h1>
+{% if tag_name %}
+<h1><center>#{{tag_name}} tagged Questions</center></h1>
+{% elif recommend %}
+<h1><center>Recommend Questions </center></h1>
+{% else %}
+<h1><center>Question List</center></h1>
+{% endif %}
 <a class="btn btn-info pull-right" href = "{% url 'recommend' user.id %}">추천게시글</a>
 <a class="btn btn-default pull-right" href = "{% url 'home' %}">전체게시글</a>
   {% if not articles %}
@@ -30,7 +36,11 @@
         <td> {{ article.id }} </td>
         <td> <a href ="{%url 'show_article' article.id %}" >{{ article.title }}</a></td>
         <td> {{ article.content }}</td>
-        <td> {{ article.user }}</td>
+        {% if article.anonymity %}
+        <td> 익명 </td>
+        {% else %}
+        <td> {{ article.user }} </td>
+        {% endif %}
         <td> {{ article.like_count }}</td>
         <td> {{ article.hits }}</td>
       </tr>

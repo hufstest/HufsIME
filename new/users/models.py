@@ -50,6 +50,7 @@ class Article(models.Model):
     content = models.TextField()
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,)
     hits = models.IntegerField(default = 0)
+    anonymity = models.BooleanField(default=True)
     @property #get 역할을 한다고 봐도 무방하다.
     def like_count(self):
       return self.like_user_set.count()
