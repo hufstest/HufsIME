@@ -4,15 +4,16 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render, redirect
 from django.db.models import Count
+import operator
 from datetime import timezone, datetime
-
+from collections import Counter
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 try:
     from django.utils import simplejson as json
 except ImportError:
     import json
-from .models import Article, Comment, Answer, Like, TaggedPost, Hit, PostTag
+from .models import Article, Comment, Answer, Like, TaggedPost, Hit, PostTag, CustomUser
 from .forms import CustomUserCreationForm, ArticleForm, CommentForm, AnswerForm
 from django.views.generic import TemplateView
 
@@ -110,15 +111,34 @@ def delete_answer(request, id):
     return render(request, 'delete_confirm.html', {'answer' : the_answer})
 
 def recommend(request, id):
-    ordered = Article.objects.filter(user_id = id).values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')
-    num = min(3,ordered.count())
+    article_related_tag_ordered = Article.objects.filter(user_id = id).values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')
+    article_related_tag_ordered_weight = dict((i[0],i[1]*5) for i in article_related_tag_ordered)
+    comment_related_tag_ordered = recommend_by_comment(id)
+    merged_tag = merge_dict(article_related_tag_ordered_weight, comment_related_tag_ordered)
+    merged_tag_sorted = sorted(merged_tag.items(), key=operator.itemgetter(1),reverse=True)
+    num = min(3,len(merged_tag_sorted))
     prefer_tag_id = []
     for i in range(num) :
-        prefer_tag_id.append(ordered[i][0])
+        prefer_tag_id.append(merged_tag_sorted[i][0])
     prefer_article_id = TaggedPost.objects.filter(tag_id__in = prefer_tag_id).values('content_object_id').distinct()
     articles = Article.objects.filter(id__in = prefer_article_id)
     recommend = True
     return render(request, 'home.html', {'articles' : articles, 'recommend' : recommend})
+
+def recommend_by_comment(id):
+    comment_related_tag = []
+    u = CustomUser.objects.get(id = id)
+    comments = u.comment_set.values("id")
+    for comment in comments :
+        article_id = Comment.objects.get(id = comment['id']).article_id
+        a = Article.objects.get(id = article_id).tags.values('id')
+        for i in a :
+            comment_related_tag.append(i['id'])
+    result = dict((i, comment_related_tag.count(i)) for i in comment_related_tag)
+    return result
+
+def merge_dict(x,y):
+    return { k: x.get(k, 0) + y.get(k, 0) for k in set(x) | set(y) }
 
 def taggedview(request, id):
     tagged_articles_id = TaggedPost.objects.filter(tag_id = id).values('content_object_id')

@@ -67,6 +67,8 @@ class Article(models.Model):
         blank=True,
         through=TaggedPost,
     )
+    class Meta:
+        ordering = ['-id']
     # comment_user_set = models.ManyToManyField(
     #     CustomUser,
     #     null=True,
