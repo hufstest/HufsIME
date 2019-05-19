@@ -159,12 +159,12 @@ def get_client_ip(request):
 @csrf_exempt
 def like(request,id):
     if request.method == 'POST':
-        user = request.user  # 로그인한 유저를 가져온다.
+        user = request.user
         article_id = request.POST.get('pk', None)
-        article = Article.objects.get(pk=article_id)  # 해당 메모 오브젝트를 가져온다.
+        article = Article.objects.get(pk=article_id)
 
-        if article.like_user_set.filter(id=user.id).exists():  # 이미 해당 유저가 likes컬럼에 존재하면
-            user.like_set.filter(article_id=article.id).delete()  # likes 컬럼에서 해당 유저를 지운다.
+        if article.like_user_set.filter(id=user.id).exists():
+            user.like_set.filter(article_id=article.id).delete()
             message = 'You disliked this'
         else:
             user.like_set.create(article_id=article_id)
@@ -173,3 +173,13 @@ def like(request,id):
     context = {'likes_count': article.like_count, 'message': message}
     return HttpResponse(json.dumps(context), content_type='application/json')
     # dic 형식을 json 형식으로 바꾸어 전달한다.
+
+
+def search(request):
+    if 'q' in request.GET:
+        q = request.GET['q']
+        message = 'You searched for: %r' % request.GET['q']
+        articles = (Article.objects.filter(title__icontains=q )) | (Article.objects.filter( content__icontains=q))
+    else:
+        message = 'You submitted an empty form.'
+    return render(request, 'home.html', {'message': message, 'articles': articles})
