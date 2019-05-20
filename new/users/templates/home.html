@@ -25,30 +25,33 @@
 </form>
 {{message}}
 
-
 <a class="btn btn-info pull-right" href = "{% url 'recommend' user.id %}">추천게시글</a>
 <a class="btn btn-default pull-right" href = "{% url 'home' %}">전체게시글</a>
   {% if not articles %}
     <br><h2 style="text-align : center">더 많은 질문을 입력할수록 추천 정확도가 높아집니다.</h2>
   {% else %}
-
-
-
     <div class="container">
     <table class="table table-striped">
       <tr>
         <th>ID</th>
         <th>Title </th>
-        <th>Content</th>
         <th>writer</th>
         <th>liked</th>
         <th>viewed</th>
       </tr>
       <tr>
+      {%for notice in notices%}
+        <td> 공지 </td>
+        <td><a href = "{{notice.1}}">{{notice.0}}</a></td>
+        <td> 운영진 </td>
+        <td></td>
+        <td></td>
+      </tr>
+      {%endfor%}
+      <tr>
       {% for article in articles%}
         <td> {{ article.id }} </td>
         <td> <a href ="{%url 'show_article' article.id %}" >{{ article.title }}</a></td>
-        <td> {{ article.content }}</td>
         {% if article.anonymity %}
         <td> 익명 </td>
         {% else %}

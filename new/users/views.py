@@ -16,6 +16,8 @@ except ImportError:
 from .models import Article, Comment, Answer, Like, TaggedPost, Hit, PostTag, CustomUser
 from .forms import CustomUserCreationForm, ArticleForm, CommentForm, AnswerForm
 from django.views.generic import TemplateView
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
 
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
@@ -27,7 +29,19 @@ class SignUp(generic.CreateView):
 
 def home(request):
     articles = Article.objects.all()
-    return render(request, 'home.html', {'articles' : articles})
+    html = urlopen("http://builder.hufs.ac.kr/user/indexSub.action?framePath=unknownboard&siteId=ime&dum=dum&boardId=69047159&page=1&command=list")
+    bsObject = BeautifulSoup(html, "html.parser")
+    bsObject = bsObject.find("form", {"name": "frm"})
+    num = 0
+    notices = []
+    for link in bsObject.find_all('a'):
+        if num > 2 :
+            break
+        base = "http://builder.hufs.ac.kr/user/"
+        # print(link.text.strip(), base+link.get('href'))
+        notices.append([link.text.strip(), base+link.get('href')])
+        num += 1
+    return render(request, 'home.html', {'articles' : articles, 'notices' : notices})
 
 def show(request, id):
     the_article = Article.objects.get(id = id)
