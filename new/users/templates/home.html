@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>HUFS IME Question</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8" name="viewport" content="width=device-width"/>
 </head>
 <body>
 {% load socialaccount %}
@@ -68,6 +72,12 @@
     </table>
     </div>
   {% endif %}
+ <div id="scroll"></div>
+<input type="hidden" id="page" value="2">
+<input type="hidden" id="limit" value="{{paginator.num_pages}}">
+<button id="callmorepost" type="button" class="btn btn-primary btn-block">More Post</button>
+
+
   <a class="btn btn-info pull-right" href = "{%url 'add_article' %}"> New Question </a>
 
 {% else %}
@@ -76,4 +86,5 @@
   <p><a href="{% provider_login_url 'google' %}">Log In with Gmail</a></p>
 {% endif %}
 </body>
+<script src="{% static 'scroll.js' %}"></script>
 </html>

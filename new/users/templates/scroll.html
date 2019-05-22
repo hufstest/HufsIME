@@ -1,0 +1,28 @@
+
+{% if not articles %}
+    <br><h2 style="text-align : center">더 많은 질문을 입력할수록 추천 정확도가 높아집니다.</h2>
+  {% else %}
+    <div class="container">
+    <table class="table table-striped">
+      <tr>
+      {% for article in articles%}
+        <td> {{ article.id }} </td>
+         <td> <a href ="{%url 'show_article' article.id %}" >{{ article.title }} ({{article.comment_set.count}})
+          {%if today == article.created_at|date:"m/d/y"%}
+            **new**
+          {%endif%}
+        </a></td>
+        {% if article.anonymity %}
+        <td> 익명 </td>
+        {% else %}
+        <td> {{ article.user }} </td>
+        {% endif %}
+        <td> {{ article.like_count }}</td>
+        <td> {{ article.hits }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    </div>
+
+{% endif %}
+

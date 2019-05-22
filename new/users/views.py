@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import generic
@@ -29,6 +30,14 @@ class SignUp(generic.CreateView):
 
 def home(request):
     articles = Article.objects.all()
+    paginator = Paginator(articles, 10)
+    page = request.POST.get('page')
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
     html = urlopen("http://builder.hufs.ac.kr/user/indexSub.action?framePath=unknownboard&siteId=ime&dum=dum&boardId=69047159&page=1&command=list")
     bsObject = BeautifulSoup(html, "html.parser")
     bsObject = bsObject.find("form", {"name": "frm"})
@@ -41,7 +50,41 @@ def home(request):
         # print(link.text.strip(), base+link.get('href'))
         notices.append([link.text.strip(), base+link.get('href')])
         num += 1
-    return render(request, 'home.html', {'articles' : articles, 'notices' : notices, 'today' : datetime.now().strftime("%x")})
+    return render(request, 'home.html', {'articles' : articles, 'notices' : notices, 'paginator':paginator, 'today': datetime.now().strftime("%x")})
+
+@csrf_exempt
+def scroll(request):  # Ajax 로 호출하는 함수
+    articles = Article.objects.all()
+    paginator = Paginator(articles, 10)
+    page = request.POST.get('page')
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles= paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
+
+    html = urlopen(
+        "http://builder.hufs.ac.kr/user/indexSub.action?framePath=unknownboard&siteId=ime&dum=dum&boardId=69047159&page=1&command=list")
+    bsObject = BeautifulSoup(html, "html.parser")
+    bsObject = bsObject.find("form", {"name": "frm"})
+    num = 0
+    notices = []
+    for link in bsObject.find_all('a'):
+        if num > 2:
+            break
+        base = "http://builder.hufs.ac.kr/user/"
+        # print(link.text.strip(), base+link.get('href'))
+        notices.append([link.text.strip(), base + link.get('href')])
+        num += 1
+        # total_page=[]
+        # total_page.append(articles)
+
+
+
+    return render(request, 'scroll.html', {'articles': articles, 'notices': notices, 'paginator':paginator ,'today' : datetime.now().strftime("%x") })
+
+
 
 def show(request, id):
     the_article = Article.objects.get(id = id)
