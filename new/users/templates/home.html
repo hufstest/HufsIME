@@ -51,7 +51,11 @@
       <tr>
       {% for article in articles%}
         <td> {{ article.id }} </td>
-        <td> <a href ="{%url 'show_article' article.id %}" >{{ article.title }}</a></td>
+        <td> <a href ="{%url 'show_article' article.id %}" >{{ article.title }} ({{article.comment_set.count}})
+          {%if today == article.created_at|date:"m/d/y"%}
+            **new**
+          {%endif%}
+        </a></td>
         {% if article.anonymity %}
         <td> 익명 </td>
         {% else %}

@@ -41,7 +41,7 @@ def home(request):
         # print(link.text.strip(), base+link.get('href'))
         notices.append([link.text.strip(), base+link.get('href')])
         num += 1
-    return render(request, 'home.html', {'articles' : articles, 'notices' : notices})
+    return render(request, 'home.html', {'articles' : articles, 'notices' : notices, 'today' : datetime.now().strftime("%x")})
 
 def show(request, id):
     the_article = Article.objects.get(id = id)

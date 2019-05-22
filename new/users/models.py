@@ -69,6 +69,8 @@ class Article(models.Model):
     )
     class Meta:
         ordering = ['-id']
+    created_at = models.DateTimeField(auto_now_add=True,)
+    updated_at = models.DateTimeField(auto_now=True,)
     # comment_user_set = models.ManyToManyField(
     #     CustomUser,
     #     null=True,
