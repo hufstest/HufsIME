@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% extends 'nav.html' %}
 <head>
     <meta charset="UTF-8">
     <title>HUFS IME Question</title>
@@ -86,5 +87,6 @@
   <p><a href="{% provider_login_url 'google' %}">Log In with Gmail</a></p>
 {% endif %}
 </body>
+{% endblock %}
 <script src="{% static 'scroll.js' %}"></script>
 </html>
