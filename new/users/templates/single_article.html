@@ -1,5 +1,6 @@
 <html>
 <head>
+    {% extends 'nav.html' %}
 {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -7,6 +8,7 @@
     <meta charset="UTF-8" name="viewport" content="width=device-width"/>
 
 </head>
+{% block content %}
 <h2>{{article.title}}</h2>
 <hr>
 <p>{{article.content}}</p>
@@ -50,6 +52,10 @@
         <input type="hidden" id="article" name="article" value="{{article.id}}">
     <button class="btn btn-default" type="submit">Save</button>
 </form>
+{% endblock %}
 
+{% block footer_scripts %}
+    {{block.super}}
 <script src="{% static 'like.js' %}"></script>
+{% endblock %}
 </html>
