@@ -11,6 +11,7 @@
     <meta charset="UTF-8" name="viewport" content="width=device-width"/>
 </head>
 <body>
+{% block content %}
 {% load socialaccount %}
 {% if user.is_authenticated %}
 <p>User : {{ user.username }} <a href="{% url 'logout' %}">Log out</a></p>
@@ -86,7 +87,8 @@
   <p><a href="{% url 'login' %}">Log In </a></p>
   <p><a href="{% provider_login_url 'google' %}">Log In with Gmail</a></p>
 {% endif %}
-</body>
 {% endblock %}
+</body>
+
 <script src="{% static 'scroll.js' %}"></script>
 </html>
