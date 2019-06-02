@@ -171,7 +171,9 @@ def recommend(request, id):
     article_related_tag_ordered = Article.objects.filter(user_id = id).values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')
     article_related_tag_ordered_weight = dict((i[0],i[1]*5) for i in article_related_tag_ordered)
     comment_related_tag_ordered = recommend_by_comment(id)
+    answer_related_tag_ordered = recommend_by_answer(id)
     merged_tag = merge_dict(article_related_tag_ordered_weight, comment_related_tag_ordered)
+    merged_tag = merge_dict(merged_tag,answer_related_tag_ordered)
     merged_tag_sorted = sorted(merged_tag.items(), key=operator.itemgetter(1),reverse=True)
     num = min(3,len(merged_tag_sorted))
     prefer_tag_id = []
@@ -192,6 +194,18 @@ def recommend_by_comment(id):
         for i in a :
             comment_related_tag.append(i['id'])
     result = dict((i, comment_related_tag.count(i)) for i in comment_related_tag)
+    return result
+
+def recommend_by_answer(id):
+    answer_related_tag = []
+    u = CustomUser.objects.get(id = id)
+    answers = u.answer_set.values("id")
+    for answer in answers :
+        article_id = Answer.objects.get(id = answer['id']).article_id
+        a = Article.objects.get(id = article_id).tags.values('id')
+        for i in a :
+            answer_related_tag.append(i['id'])
+    result = dict((i, answer_related_tag.count(i)) for i in answer_related_tag)
     return result
 
 def merge_dict(x,y):
@@ -240,3 +254,19 @@ def search(request):
     else:
         message = 'You submitted an empty form.'
     return render(request, 'home.html', {'message': message, 'articles': articles})
+
+def mypage(request):
+    id = request.user.id
+    article_related_tag_ordered = Article.objects.filter(user_id = id).values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')
+    article_related_tag_ordered = dict(article_related_tag_ordered)
+    comment_related_tag_ordered = recommend_by_comment(id)
+    answer_related_tag_ordered = recommend_by_answer(id)
+    merged_tag = merge_dict(article_related_tag_ordered, comment_related_tag_ordered)
+    merged_tag = merge_dict(merged_tag, answer_related_tag_ordered)
+    if None in merged_tag:
+        del merged_tag[None]
+    tags_info = []
+    for i in merged_tag :
+        p = str(PostTag.objects.get(id = i))
+        tags_info.append([p,merged_tag[i]])
+    return render(request, 'mypage.html', {'tag_info':merged_tag, 'tags' : tags_info})
