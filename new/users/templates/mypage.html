@@ -10,17 +10,63 @@
       <div id = "container" style = "width: 550px; height: 400px; margin: 0 auto">
 
       </div>
-    {%for i in user.article_set.values%}
-        {{i.content}}</br>
-    {%endfor%}
-    ==========================================</br>
-    {%for i in user.comment_set.values%}
-        {{i.comment_text}}</br>
-    {%endfor%}
-    ==========================================</br>
-    {%for i in user.answer_set.values%}
-        {{i.answer_text}}
-    {%endfor%}
+      <a class="btn btn-default pull-right" href = "{% url 'mypage' 3 %}">나의 답변</a>
+      <a class="btn btn-default pull-right" href = "{% url 'mypage' 2 %}">나의 댓글</a>
+      <a class="btn btn-default pull-right" href = "{% url 'mypage' 1 %}">나의 질문</a></br>
+
+    {% if category == 1 %}
+    <p>나의 질문</p>
+    <div class="container">
+         <table class="table table-striped">
+           <tr>
+             <th>ID</th>
+             <th>Title </th>
+             <th>created_at</th>  
+           </tr>
+           <tr>
+            {%for i in user.article_set.values%}
+               <th>{{i.id}}</th>
+               <th>{{i.title|truncatechars:15}}</th>
+               <th>{{i.created_at}}</th>
+            </tr>
+            {%endfor%}
+         </table>
+    {% endif %}
+    {% if category == 2 %}
+    <p>나의 댓글</p>
+    <div class="container">
+         <table class="table table-striped">
+           <tr>
+             <th>ID</th>
+             <th>comment </th>
+             <th>created_at</th>  
+           </tr>
+           <tr>
+            {%for i in user.comment_set.values%}
+               <th>{{i.id}}</th>
+               <th>{{i.comment_text|truncatechars:15}}</th>
+               <th>{{i.created_at}}</th>
+            </tr>
+            {%endfor%}
+         </table>
+    {% endif %}
+    {% if category == 3 %}
+    <p>나의 답변</p>
+    <div class="container">
+         <table class="table table-striped">
+           <tr>
+             <th>ID</th>
+             <th>Answer</th>
+             <th>created_at</th>  
+           </tr>
+           <tr>
+            {%for i in user.answer_set.values%}
+               <th>{{i.id}}</th>
+               <th>{{i.answer_text|truncatechars:15}}</th>
+               <th>{{i.created_at}}</th>
+            </tr>
+            {%endfor%}
+   {% endif %}
    {% endblock %}
 
 

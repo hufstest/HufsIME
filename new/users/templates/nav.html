@@ -36,7 +36,7 @@
         <li><a href="http://ime.hufs.ac.kr/"> <span class="glyphicon glyphicon-education"></span> IME 학과 홈페이지</a></li>
         <li><a href="http://eclass2.hufs.ac.kr:8181/ilos/main/main_form.acl"> <span class="glyphicon glyphicon-book"></span> E-Class</a></li>
         <li><a href="https://wis.hufs.ac.kr/src08/jsp/index.jsp"> <span class="glyphicon glyphicon-user"></span> 종합정보시스템</a></li>
-  <li><a href="{%url 'mypage' %}"> <span class="glyphicon glyphicon-heart"></span> {{user.username}}</a></li>
+  <li><a href="{%url 'mypage' 1 %}"> <span class="glyphicon glyphicon-heart"></span> {{user.username}}</a></li>
   <li><a href="{% url 'logout' %}">Logout</a></li>
   {% else %}
   <li><a href="{%url 'home' %}"> <span class="glyphicon glyphicon-user"></span> Login</a></li>

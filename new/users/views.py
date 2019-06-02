@@ -255,7 +255,7 @@ def search(request):
         message = 'You submitted an empty form.'
     return render(request, 'home.html', {'message': message, 'articles': articles})
 
-def mypage(request):
+def mypage(request, category):
     id = request.user.id
     article_related_tag_ordered = Article.objects.filter(user_id = id).values_list('tags').annotate(tags_count=Count('tags')).order_by('-tags_count')
     article_related_tag_ordered = dict(article_related_tag_ordered)
@@ -269,4 +269,4 @@ def mypage(request):
     for i in merged_tag :
         p = str(PostTag.objects.get(id = i))
         tags_info.append([p,merged_tag[i]])
-    return render(request, 'mypage.html', {'tag_info':merged_tag, 'tags' : tags_info})
+    return render(request, 'mypage.html', {'tag_info':merged_tag, 'tags' : tags_info, "category" : category})
