@@ -1,14 +1,21 @@
 <html>
-<body>
-<div class="container">
-<h1> New / Update article</h1>
+<head>
+{% extends 'nav.html' %}
+</head>
 
+<body>
+{% block content %}
+
+<div class="container">
+<h1> New article</h1>
+<hr>
 <form method="POST"> 
   {% csrf_token %}
-      <label>Title</label> {{ form.title}} </br>
-      <label>Content</label>  {{ form.content}} </br>
-      <label>Tags</label> {{form.tags}} 쉼표로 구분해서 태그를 달아주세요.</br>
-      <label>Anonymity</label>  {{ form.anonymity}} </br>
+      <label>Title</label> {{ form.title}} <br>
+      <label>Content</label>  {{ form.content}} <br>
+      <label>Tags</label> {{form.tags}} 쉼표로 구분해서 태그를 달아주세요.<br>
+      <hr>
+      <label>Anonymity</label>  {{ form.anonymity}} <br>
       <input type="hidden" id="user" name="user" value="{{user.id}}">
   <button class="btn btn-default" type="submit">Save</button>
   <button onclick="window.history.back();" class="btn btn-default" type="button">Cancel</button>
@@ -17,7 +24,8 @@
   {% if article %}
       <a class="btn btn-danger" href="{%url 'delete_article' article.id %}">Delete</a> 
   {%endif%}
-  </div>
+</div>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+{% endblock %}
 </body>
 </html>
