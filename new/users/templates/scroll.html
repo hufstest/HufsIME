@@ -6,19 +6,25 @@
     <table class="table table-striped">
       <tr>
       {% for article in articles%}
-        <td> {{ article.id }} </td>
-         <td> <a href ="{%url 'show_article' article.id %}" >{{ article.title }} ({{article.comment_set.count}})
+        <td class="col-md-1"> {{ article.id }} </td>
+        <td class="col-md-5"> <a href ="{%url 'show_article' article.id %}" >{{ article.title }} ({{article.comment_set.count}})
           {%if today == article.created_at|date:"m/d/y"%}
             **new**
           {%endif%}
         </a></td>
+        <td class="col-md-1" style = "text-align: center">{{article.comment_set.count}}</td>
         {% if article.anonymity %}
-        <td> 익명 </td>
+        <td class="col-md-2" style = "text-align: center"> 익명 </td>
         {% else %}
-        <td> {{ article.user }} </td>
+        <td class="col-md-2" style = "text-align: center"> {{ article.user }} </td>
         {% endif %}
-        <td> {{ article.like_count }}</td>
-        <td> {{ article.hits }}</td>
+        {%if today == article.created_at|date:"m/d/y"%}
+        <td class="col-md-1" style = "text-align: center">{{article.created_at|date:"h:m"}}</td>
+        {%else%}
+        <td class="col-md-1" style = "text-align: center">{{article.created_at|date:"y/m/d"}}</td>
+        {%endif%}
+        <td class="col-md-1" style = "text-align: center"> {{ article.like_count }}</td>
+        <td class="col-md-1" style = "text-align: center"> {{ article.hits }}</td>
       </tr>
       {% endfor %}
     </table>

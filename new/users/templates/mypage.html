@@ -15,7 +15,7 @@
       <a class="btn btn-default pull-right" href = "{% url 'mypage' 1 %}">나의 질문</a></br>
 
     {% if category == 1 %}
-    <p>나의 질문</p>
+    <h3>나의 질문</h3>
     <div class="container">
          <table class="table table-striped">
            <tr>
@@ -26,7 +26,7 @@
            <tr>
             {%for i in user.article_set.values%}
                <th>{{i.id}}</th>
-               <th>{{i.title|truncatechars:15}}</th>
+               <th><a href = "{%url 'show_article' i.id %}">{{i.title|truncatechars:15}}</a></th>
                <th>{{i.created_at}}</th>
             </tr>
             {%endfor%}
@@ -44,7 +44,7 @@
            <tr>
             {%for i in user.comment_set.values%}
                <th>{{i.id}}</th>
-               <th>{{i.comment_text|truncatechars:15}}</th>
+               <th><a href = "{%url 'show_article' i.article_id %}">{{i.comment_text|truncatechars:15}}</a></th>
                <th>{{i.created_at}}</th>
             </tr>
             {%endfor%}
@@ -62,7 +62,7 @@
            <tr>
             {%for i in user.answer_set.values%}
                <th>{{i.id}}</th>
-               <th>{{i.answer_text|truncatechars:15}}</th>
+               <th><a href = "{%url 'show_article' i.article_id %}">{{i.answer_text|truncatechars:15}}</a></th>
                <th>{{i.created_at}}</th>
             </tr>
             {%endfor%}
@@ -89,7 +89,7 @@
             
             // Set chart options
             var options = {
-               'title':'Related Tags with your activity',
+               'title':'나의 활동과 관련된 태그',
                'width':550,
                'height':400,
                is3D:false

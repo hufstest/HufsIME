@@ -39,7 +39,7 @@
     <div class="section">
         {% if article.user.id == user.id %}
         <a class="btn btn-danger pull-right" href="{%url 'delete_article' article.id %}">Delete</a>
-        <a class="btn btn-info pull-right" href ="{%url 'update_article' article.id %}" >Update  </a>
+        <a class="btn btn-info pull-right" href ="{%url 'update_article' article.id %}"  style = "margin-right: 10px">Update  </a>
         
         {% endif %}
         <p id="count{{ article.id }}"> count : {{ article.like_count}} </p>
