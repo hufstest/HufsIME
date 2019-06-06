@@ -78,6 +78,19 @@
 <input type="hidden" id="limit" value="{{paginator.num_pages}}">
 <button id="callmorepost" type="button" class="btn btn-primary btn-block">More Post</button>
 
+
+<div class="totop "><a class="back-to-top" href="#search" alt="맨 위로 돌아가기" style=" width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    background-image: url('{% static 'images/direction.png' %}');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #4c8fdc;
+    position: fixed;
+    bottom: 16px;
+    right: 16px; display:inline;"></a><div class="clearing"></div></div>
+
+
 {% else %}
   <p><a href="{% url 'signup' %}">Sign Up</a></p>
   <p><a href="{% url 'login' %}">Log In </a></p>
@@ -88,5 +101,6 @@
 {% block footer_scripts %}
 {{block.super}}
 <script src="{% static 'scroll.js' %}"></script>
+<script src="{%static 'upscroll.js' %}"></script>
 {% endblock %}
 </html>
