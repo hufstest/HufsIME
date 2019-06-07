@@ -142,8 +142,9 @@ def update_article(request, id):
 
 def delete_article(request, id):
     the_article = Article.objects.get(id = id)
-    
+
     if request.method == 'POST':
+
         the_article.delete()
         return redirect('home')
     

@@ -4,6 +4,10 @@ var limit= $('#limit').val()
 var temp=0
 $('#callmorepost').click(function(){
             var page = $('#page').val();
+
+            if(page > limit){
+                return;
+                }
 //            if(page > limit){
 //                return;
 //                }
