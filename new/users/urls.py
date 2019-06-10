@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     # path('', views.HomePageView.as_view(), name='home'),
     path('', views.LoginView.as_view(), name='login'),
-    path('', views.home, name='home'),
+    path('/home', views.home, name='home'),
     path('mypage/<int:category>',views.mypage, name='mypage'),
     path('recommend/<int:id>/', views.recommend, name='recommend'),
     path('tagged/<int:id>/', views.taggedview, name='tagged'),
