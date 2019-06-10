@@ -28,6 +28,11 @@
 {% endblock css %}
 {% load socialaccount %}
 {% block content %}
+{% if user.is_active %}
+<script>
+    location.href="{%url 'home' %}"
+</script>
+{% else %}
 <div class="panel panel-primary registration">
     <div class="panel-heading">
         로그인하기
@@ -59,4 +64,5 @@
  </div>
     </div>
 </div>
+{% endif %}
 {% endblock content %}

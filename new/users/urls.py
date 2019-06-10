@@ -3,8 +3,7 @@ from . import views
 
 urlpatterns = [
     # path('', views.HomePageView.as_view(), name='home'),
-    path('', views.LoginView.as_view(), name='login'),
-    path('/home', views.home, name='home'),
+    path('', views.home, name='home'),
     path('mypage/<int:category>',views.mypage, name='mypage'),
     path('recommend/<int:id>/', views.recommend, name='recommend'),
     path('tagged/<int:id>/', views.taggedview, name='tagged'),
@@ -17,5 +16,5 @@ urlpatterns = [
     path('answer_delete/<int:id>/', views.delete_answer, name = 'delete_answer'),
     path('show/<int:id>/like/',views.like,name='like'),
     path('search/', views.search, name="search_article"),
-    path('home/scroll/', views.scroll, name='scroll'),
+    path('scroll/', views.scroll, name='scroll'),
 ]

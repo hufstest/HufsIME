@@ -12,7 +12,7 @@
 </head>
 <body>
 {% block content %}
-{% load socialaccount %}
+<!--{% load socialaccount %}-->
 {% if user.is_authenticated %}
 {% if tag_name %}
 <h1 style = "margin-top: 30px"><center>#{{tag_name}} tagged Questions</center></h1>
@@ -102,7 +102,9 @@
 
 
 {% else %}
-
+<script>
+    location.href="{%url 'login' %}"
+</script>
 {% endif %}
 {% endblock %}
 </body>
