@@ -17,5 +17,5 @@ urlpatterns = [
     path('answer_delete/<int:id>/', views.delete_answer, name = 'delete_answer'),
     path('show/<int:id>/like/',views.like,name='like'),
     path('search/', views.search, name="search_article"),
-    path('scroll/', views.scroll, name='scroll'),
+    path('home/scroll/', views.scroll, name='scroll'),
 ]
