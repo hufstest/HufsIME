@@ -19,7 +19,7 @@ $('#callmorepost').click(function(){
         $(window).scroll(function(){
             var scrollHeight = $(window).scrollTop() + $(window).height();
             var documentHeight = $(document).height();
-            if (scrollHeight+300 >= documentHeight){
+            if (scrollHeight >= documentHeight){
             var page = $('#page').val();
             if(page > limit){
                 return;

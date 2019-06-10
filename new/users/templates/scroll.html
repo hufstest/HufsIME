@@ -2,8 +2,8 @@
 {% if not articles %}
     <br><h2 style="text-align : center">더 많은 질문을 입력할수록 추천 정확도가 높아집니다.</h2>
   {% else %}
-    <div class="container">
-    <table class="table table-striped">
+    <div class="container" style = "margin-bottom: 0px; margin-top: 0px; ">
+    <table class="table table-striped" style = "margin-bottom: 0px;">
       <tr>
       {% for article in articles%}
         <td class="col-md-1"> {{ article.id }} </td>
