@@ -39,7 +39,7 @@
   <li><a href="{%url 'mypage' 1 %}"> <span class="glyphicon glyphicon-heart"></span> {{user.username}}</a></li>
   <li><a href="{% url 'logout' %}">Logout</a></li>
   {% else %}
-  <li><a href="{%url 'home' %}"> <span class="glyphicon glyphicon-user"></span> Login</a></li>
+
   <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-home"></span>Admin</a></li>
   {% endif %}
 </ul>

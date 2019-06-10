@@ -16,9 +16,14 @@ except ImportError:
     import json
 from .models import Article, Comment, Answer, Like, TaggedPost, Hit, PostTag, CustomUser
 from .forms import CustomUserCreationForm, ArticleForm, CommentForm, AnswerForm
+from django.contrib.auth import views
 from django.views.generic import TemplateView
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+
+class LoginView(views.LoginView):
+    pass
+
 
 class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
