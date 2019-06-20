@@ -20,8 +20,10 @@ pip install allauth
 
 1. Social Login
 >- We used Google API & Allauth. It might secure our page.
+
 2. Crawling
 >- We used beautifulsoup to displaying notices of IME official page.
+
 3. Tag function
 >- We used Taggit for this function. By this function, user's interest can be known through the activity history of the user. And it allows to freely find the questions associated with the tag.
 
@@ -36,3 +38,4 @@ pip install allauth
 
 8. Google Visualization
 >- Based on the tag data, user can check the activity of oneself's at a glance by pie chart.
+
