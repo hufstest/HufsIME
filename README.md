@@ -1,5 +1,8 @@
 # HufsIME
-This is HUFS IME Question page
+This is HUFS IME Information development system project!
+
+## Objective of this project
+We have created anonymous website that does not require personal information. This makes sure students don't feel pressure asking questions. Students can ask questions each other, so it can make active and dynamic educational place. Professors will also be able to check what students don't know. Therefore, we can expect the effect of increasing student understanding in industrial management engineering.
 
 ## Required Packages
 
